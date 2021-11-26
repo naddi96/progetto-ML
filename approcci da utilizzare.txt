@@ -1,0 +1,11 @@
+gnn
+neural network
+decision tree
+random forest
+classificatori bayesiani e probabilistici
+Gaussian Discriminant Analysis
+Generalized Linear Models
+Logistic Regression ->  softmax regression
+
+
+
