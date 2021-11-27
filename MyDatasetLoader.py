@@ -13,6 +13,8 @@ from torch_geometric.data import Data
 
 from torch_geometric.data import DataLoader,InMemoryDataset
 import numpy as np
+from sklearn.decomposition import PCA
+
 
 class MyDatasetLoader(InMemoryDataset):
     
@@ -31,27 +33,32 @@ class MyDatasetLoader(InMemoryDataset):
     def processed_file_names(self):
         return ['cites.pt',"content.pt"]
 
+    
+    
     def download(self):
         pass
 
     def process(self): 
-        feat_data, labels, edge_index, word_count, labels_count = self.load_cora_raw()
+        feat_data, labels, edge_index, word_count, labels_count,label_map = self.load_cora_raw()
         edge_index= torch.tensor(edge_index)
         labels=  torch.tensor(labels, dtype=torch.long)
         num_nodes=2708
         feat_data=torch.tensor(feat_data,dtype=torch.float32)
+
+
         data = Data(x=feat_data,
                     edge_index=edge_index,
                     y=labels,
                     word_count=word_count,
-                    labels_count=labels_count)
+                    labels_count=labels_count,
+                    label_map=label_map)
         data.train_mask= torch.zeros([2708], dtype=torch.bool) 
         data.train_mask.fill_(True)
         data.test_mask= torch.zeros([2708], dtype=torch.bool) 
         data.test_mask.fill_(False)
         data.val_mask= torch.zeros([2708], dtype=torch.bool) 
         data.val_mask.fill_(False)
-
+        random.seed(3423)
         sampled_test = random.sample(range(num_nodes), int(num_nodes*0.40))
         data.train_mask[sampled_test]=False
         sampled_val=[]
@@ -65,6 +72,7 @@ class MyDatasetLoader(InMemoryDataset):
         
 
         data = data if self.pre_transform is None else self.pre_transform(data)
+        
         torch.save(self.collate([data]), self.processed_paths[0])
 
     @staticmethod
@@ -117,4 +125,4 @@ class MyDatasetLoader(InMemoryDataset):
                 edge_list2.append(paper1)
 
 
-        return feat_data, labels , [edge_list1,edge_list2],word_count,labels_count
+        return feat_data, labels , [edge_list1,edge_list2],word_count,labels_count,label_map
