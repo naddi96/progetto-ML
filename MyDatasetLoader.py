@@ -58,7 +58,7 @@ class MyDatasetLoader(InMemoryDataset):
         data.test_mask.fill_(False)
         data.val_mask= torch.zeros([2708], dtype=torch.bool) 
         data.val_mask.fill_(False)
-        random.seed(3423)
+        random.seed(12)
         sampled_test = random.sample(range(num_nodes), int(num_nodes*0.40))
         data.train_mask[sampled_test]=False
         sampled_val=[]
