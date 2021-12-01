@@ -57,12 +57,12 @@ class MyDatasetLoader(InMemoryDataset):
         sampled_test = random.sample(range(num_nodes), int(num_nodes*0.40))
         data.train_mask[sampled_test]=False
         sampled_val=[]
-        data.x[sampled_test]= torch.zeros([1433], dtype=torch.float32)
-        for x in range(0,int(num_nodes*0.1)):
+        #data.x[sampled_test]= torch.zeros([1433], dtype=torch.float32)
+        """ for x in range(0,int(num_nodes*0.1)):
             num=sampled_test.pop()
             sampled_val.append(num)
         
-        data.val_mask[sampled_val]=True
+        data.val_mask[sampled_val]=True """
         data.test_mask[sampled_test]=True
         
 
